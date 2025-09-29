@@ -16,6 +16,8 @@ class ModFile
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+    #[ORM\Column]
+    private ?string $name = null;
     #[ORM\ManyToOne(inversedBy: 'modFiles')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Mod $modEntity = null;
@@ -38,15 +40,6 @@ class ModFile
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getModId(): ?Collection {
-        return $this->modId;
-    }
-
-    public function setModId(?Collection $modId): ModFile {
-        $this->modId = $modId;
-        return $this;
     }
 
     public function getModVersion(): ?string {
@@ -91,6 +84,24 @@ class ModFile
 
     public function setStatus(?FileStatus $status): ModFile {
         $this->status = $status;
+        return $this;
+    }
+
+    public function getName(): ?string {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getModEntity(): ?Mod {
+        return $this->modEntity;
+    }
+
+    public function setModEntity(?Mod $modEntity): self {
+        $this->modEntity = $modEntity;
         return $this;
     }
 }
