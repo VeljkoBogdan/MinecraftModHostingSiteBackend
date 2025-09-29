@@ -2,17 +2,21 @@
 
 ## 1. Core Domain Models
 - **User**
-    - id, username, email, password (hashed), role (admin, mod, user), created_at, updated_at
+    - id, username, email, password (hashed), role (admin, mod, user), created_at, updated_at, isActive, isBanned
 - **Mod**
-    - id, slug, name, description, category, loaders (e.g., Fabric, Forge), side (client/server/both), downloads (counter), license, created_at, updated_at
+    - id, slug, name, description, category, loaders, side, downloads (counter), license, created_at, updated_at, versions
 - **File**
-    - id, mod_id, version string (e.g., `1.2.0`), changelog, file upload, checksum (SHA256), supported game versions
+    - id, mod_id, mod version, changelog, file upload, checksum (SHA256), supported game versions (GameVersion), status (disabled, waiting approval, approved)
 - **Category**
-    - id, name (e.g., “Technology”, “Magic”, “QoL”)
+    - id, name
 - **Loader**
-    - id, name (Forge, Fabric, Quilt, NeoForge, etc.)
+    - id, name
 - **GameVersion**
-    - id, version string (e.g., `1.20.1`)
+    - id, version string
+
+- Create controllers with CRUD operations for each model
+- Add activate/deactivate and ban/unban endpoints to user controller
+- Add change status endpoint to file
 
 ---
 
@@ -61,11 +65,4 @@
 - Admin dashboard (approve mods, review reports)
 - Report system (users can report mods/files)
 - Ban/suspend users
-
----
-
-## 8. API
-- REST (or GraphQL) endpoints
-- Authentication middleware (e.g., JWT bearer token)
-- Rate limiting to prevent abuse
 

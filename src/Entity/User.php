@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'users')]
 class User {
     #[ORM\Id]
     #[ORM\Column]
@@ -28,6 +29,10 @@ class User {
     private ?DateTimeImmutable $createdAt = null;
     #[ORM\Column]
     private ?DateTimeImmutable $updatedAt = null;
+    #[ORM\Column]
+    private ?bool $isActive = null;
+    #[ORM\Column]
+    private ?bool $isBanned = null;
 
     public function __construct() {
 
@@ -88,6 +93,24 @@ class User {
 
     public function setUpdatedAt(?DateTimeImmutable $updatedAt): User {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getIsActive(): ?bool {
+        return $this->isActive;
+    }
+
+    public function setIsActive(?bool $isActive): User {
+        $this->isActive = $isActive;
+        return $this;
+    }
+
+    public function getIsBanned(): ?bool {
+        return $this->isBanned;
+    }
+
+    public function setIsBanned(?bool $isBanned): User {
+        $this->isBanned = $isBanned;
         return $this;
     }
 

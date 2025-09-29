@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ModRepository;
 use App\Util\ContextGroup;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -21,6 +23,8 @@ class Mod
     private ?string $slug = null;
     #[ORM\Column]
     private ?string $name = null;
+    #[ORM\Column]
+    private ?string $description = null;
     #[ORM\Column(type: "simple_array", nullable: true)]
     private ?array $categories = null;
     #[ORM\Column(type: 'json')]
@@ -35,12 +39,15 @@ class Mod
     private ?DateTimeImmutable $updatedAt = null;
     #[ORM\Column(enumType: License::class)]
     private ?License $license = null;
-    // TODO: Add ModFile target entity
-//    #[ORM\OneToMany(mappedBy: 'mod', targetEntity: ADDHERE)]
-//    private ?Collection $modFiles;
+    #[ORM\OneToMany(targetEntity: ModFile::class, mappedBy: 'mod_entity', cascade: ['persist', 'remove'])]
+    private ?Collection $modFiles;
+    #[ORM\ManyToMany(targetEntity: GameVersion::class)]
+    private ?Collection $versions;
 
     public function __construct() {
         $this->license = License::default();
+        $this->modFiles = new ArrayCollection();
+        $this->versions = new ArrayCollection();
     }
 
     public function getId(): ?int {
