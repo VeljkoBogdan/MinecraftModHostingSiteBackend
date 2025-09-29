@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ModLoaderRepository;
+use App\Repository\ModCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ModLoaderRepository::class)]
-class ModLoader
+#[ORM\Entity(repositoryClass: ModCategoryRepository::class)]
+class ModCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
