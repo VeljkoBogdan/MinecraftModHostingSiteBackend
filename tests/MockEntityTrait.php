@@ -17,8 +17,8 @@ trait MockEntityTrait {
     protected static array $modJsonData = [
         "name" => "Epic Weapons Mod",
         "description" => "Adds new weapons and armors for all game versions.",
-        "categories" => [1, 3],
-        "loaders" => ["forge", "fabric"],
+        "categories" => [1, 2],
+        "loaders" => [1],
         "side" => ModSide::SIDE_BOTH,
         "license" => License::MIT
     ];
@@ -47,10 +47,14 @@ trait MockEntityTrait {
     }
 
     protected static function generateTestModLoader(): ModLoader {
-        return (new ModLoader())->setName("forge");
+        return (new ModLoader())
+            ->setName("forge")
+            ;
     }
     protected static function generateTestModCategory(): ModCategory {
-        return (new ModCategory())->setName("tech");
+        return (new ModCategory())
+            ->setName("tech")
+            ;
     }
     protected static function generateTestModFile(Collection $gameVersions): ModFile {
         return (new ModFile())
@@ -63,6 +67,8 @@ trait MockEntityTrait {
             ;
     }
     protected static function generateTestGameVersion(): GameVersion {
-        return (new GameVersion())->setSlug("1.20.1");
+        return (new GameVersion())
+            ->setSlug("1.20.1")
+            ;
     }
 }

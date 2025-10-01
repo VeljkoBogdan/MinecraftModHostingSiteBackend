@@ -12,8 +12,9 @@ use App\Entity\ModLoader;
 use App\Tests\EntityManagerAwareTrait;
 use App\Tests\MockEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Nebkam\FluentTest\RequestBuilder;
-use phpDocumentor\Reflection\Types\Collection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -59,5 +60,42 @@ class ModControllerTest extends WebTestCase {
 
         $content = $response->getJsonContent();
         self::assertNotEmpty($content);
+    }
+
+    public function testCreate() {
+        $response = RequestBuilder::create(self::createClient())
+            ->setMethod(Request::METHOD_POST)
+            ->setUri('/api/mod/')
+            ->setJsonContent(self::$modJsonData)
+            ->getResponse();
+        self::assertResponseIsSuccessful();
+    }
+
+    public function testUpdate() {
+        $updatedName = "Updated mod";
+        $response = RequestBuilder::create(self::createClient())
+            ->setMethod(Request::METHOD_PATCH)
+            ->setUri('/api/mod/' . self::$mod->getId())
+            ->setJsonContent(["name" => $updatedName])
+            ->getResponse();
+        self::assertResponseIsSuccessful();
+    }
+
+    public function testDelete() {
+        $response = RequestBuilder::create(self::createClient())
+            ->setMethod(Request::METHOD_DELETE)
+            ->setUri('/api/mod/' . self::$mod->getId())
+            ->getResponse();
+        self::assertResponseIsSuccessful();
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    public static function tearDownAfterClass(): void {
+        self::removeEntityById(Mod::class, self::$mod->getId());
+
+        parent::tearDownAfterClass();
     }
 }
