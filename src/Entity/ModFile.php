@@ -3,13 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\ModFileRepository;
+use App\Util\ContextGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Self_;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ModFileRepository::class)]
 #[ORM\Table(name: 'modFile')]
+#[Groups([ContextGroup::MOD_FILE_INDEX])]
 class ModFile
 {
     #[ORM\Id]
