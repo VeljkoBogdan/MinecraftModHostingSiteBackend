@@ -21,13 +21,13 @@ class ModType extends AbstractType {
             ->add('name', TextType::class)
             ->add('description', TextType::class)
             ->add('categories', EntityType::class, [
-                'data_class' => ModCategory::class,
+                'class' => ModCategory::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true
             ])
             ->add('loaders', EntityType::class, [
-                'data_class' => ModLoader::class,
+                'class' => ModLoader::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true
