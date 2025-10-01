@@ -25,9 +25,9 @@ class Mod
     private ?string $name = null;
     #[ORM\Column]
     private ?string $description = null;
-    #[ORM\ManyToMany(targetEntity: ModCategory::class)]
+    #[ORM\ManyToMany(targetEntity: ModCategory::class, inversedBy: 'mods', cascade: ['persist', 'remove'])]
     private ?Collection $categories;
-    #[ORM\ManyToMany(targetEntity: ModLoader::class)]
+    #[ORM\ManyToMany(targetEntity: ModLoader::class, inversedBy: 'mods', cascade: ['persist', 'remove'])]
     private ?Collection $loaders;
     #[ORM\Column(enumType: ModSide::class)]
     private ?ModSide $side = null;
@@ -41,7 +41,7 @@ class Mod
     private ?License $license;
     #[ORM\OneToMany(targetEntity: ModFile::class, mappedBy: 'modEntity', cascade: ['persist', 'remove'])]
     private ?Collection $modFiles;
-    #[ORM\ManyToMany(targetEntity: GameVersion::class)]
+    #[ORM\ManyToMany(targetEntity: GameVersion::class, inversedBy: 'mods', cascade: ['persist', 'remove'])]
     private ?Collection $versions;
     #[ORM\Column]
     private ?bool $deleted = null;

@@ -14,14 +14,22 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 
 trait MockEntityTrait {
-    protected static array $modJsonData = [
-        "name" => "Epic Weapons Mod",
-        "description" => "Adds new weapons and armors for all game versions.",
-        "categories" => [1, 2],
-        "loaders" => [1],
-        "side" => ModSide::SIDE_BOTH,
-        "license" => License::MIT
-    ];
+    protected static function getModJsonData(
+        array $modCategories,
+        array $modLoaders
+    ): array {
+        $data = [
+            "name" => "Epic Weapons Mod",
+            "description" => "Adds new weapons and armors for all game versions.",
+            "side" => ModSide::SIDE_BOTH,
+            "license" => License::MIT
+        ];
+
+        $data['categories'] = array_map(fn(ModCategory $modCategory) => $modCategory->getId(), $modCategories);
+        $data['loaders'] = array_map(fn(ModLoader $modLoader) => $modLoader->getId(), $modLoaders);
+
+        return $data;
+    }
 
     protected static function generateTestMod(
         Collection $categories,

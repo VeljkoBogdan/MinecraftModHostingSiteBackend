@@ -66,7 +66,7 @@ class ModControllerTest extends WebTestCase {
         $response = RequestBuilder::create(self::createClient())
             ->setMethod(Request::METHOD_POST)
             ->setUri('/api/mod/')
-            ->setJsonContent(self::$modJsonData)
+            ->setJsonContent(self::getModJsonData([self::$modCategory], [self::$modLoader]))
             ->getResponse();
         self::assertResponseIsSuccessful();
     }
@@ -95,6 +95,7 @@ class ModControllerTest extends WebTestCase {
      */
     public static function tearDownAfterClass(): void {
         self::removeEntityById(Mod::class, self::$mod->getId());
+        self::removeEntityById(ModFile::class, self::$modFile->getId());
 
         parent::tearDownAfterClass();
     }

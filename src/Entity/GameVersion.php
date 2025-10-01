@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GameVersionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GameVersionRepository::class)]
@@ -16,6 +18,13 @@ class GameVersion
 
     #[ORM\Column]
     private ?string $slug = null;
+
+    #[ORM\ManyToMany(targetEntity: Mod::class, mappedBy: 'versions')]
+    private ?Collection $mods;
+
+    public function __construct() {
+        $this->mods = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -31,6 +40,15 @@ class GameVersion
     {
         $this->slug = $slug;
 
+        return $this;
+    }
+
+    public function getMods(): ?Collection {
+        return $this->mods;
+    }
+
+    public function setMods(?Collection $mods): self {
+        $this->mods = $mods;
         return $this;
     }
 }

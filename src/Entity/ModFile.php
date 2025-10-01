@@ -18,7 +18,7 @@ class ModFile
     private ?int $id = null;
     #[ORM\Column]
     private ?string $name = null;
-    #[ORM\ManyToOne(inversedBy: 'modFiles')]
+    #[ORM\ManyToOne(targetEntity: Mod::class, inversedBy: 'modFiles')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Mod $modEntity = null;
     #[ORM\Column]
@@ -28,7 +28,7 @@ class ModFile
     // TODO: add file upload
     #[ORM\Column]
     private ?string $checksum = null;
-    #[ORM\ManyToMany(targetEntity: GameVersion::class, mappedBy: 'modFile')]
+    #[ORM\ManyToMany(targetEntity: GameVersion::class)]
     private ?Collection $gameVersions;
     #[ORM\Column(enumType: FileStatus::class)]
     private ?FileStatus $status = null;
