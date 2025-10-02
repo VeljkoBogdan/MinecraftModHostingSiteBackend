@@ -27,13 +27,14 @@ class ModFile
     private ?string $modVersion = null;
     #[ORM\Column]
     private ?string $changelog = null;
-    // TODO: add file upload
     #[ORM\Column]
     private ?string $checksum = null;
     #[ORM\ManyToMany(targetEntity: GameVersion::class)]
     private ?Collection $gameVersions;
     #[ORM\Column(enumType: FileStatus::class)]
     private ?FileStatus $status = null;
+    #[ORM\Column]
+    private ?bool $isActive = null;
 
     public function __construct() {
         $this->gameVersions = new ArrayCollection();
@@ -104,6 +105,15 @@ class ModFile
 
     public function setModEntity(?Mod $modEntity): self {
         $this->modEntity = $modEntity;
+        return $this;
+    }
+
+    public function getIsActive(): ?bool {
+        return $this->isActive;
+    }
+
+    public function setIsActive(?bool $isActive): self {
+        $this->isActive = $isActive;
         return $this;
     }
 }

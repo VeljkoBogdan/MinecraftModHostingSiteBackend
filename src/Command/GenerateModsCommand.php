@@ -72,7 +72,8 @@ class GenerateModsCommand extends Command
                 ->setChecksum("t3st_ch3cksum")
                 ->setGameVersions(new ArrayCollection([$gameVersion]))
                 ->setModVersion("1.0.0")
-                ->setChangelog("Test changelog");
+                ->setChangelog("Test changelog")
+                ->setIsActive(true);
 
             $this->entityManager->persist($modCategory);
             $this->entityManager->persist($modLoader);
