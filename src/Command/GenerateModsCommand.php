@@ -2,12 +2,16 @@
 
 namespace App\Command;
 
+use App\Entity\FileStatus;
+use App\Entity\GameVersion;
 use App\Entity\License;
 use App\Entity\Mod;
-use App\Entity\ModCategories;
+use App\Entity\ModCategory;
+use App\Entity\ModFile;
 use App\Entity\ModLoader;
 use App\Entity\ModSide;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -50,11 +54,40 @@ class GenerateModsCommand extends Command
             $now = new DateTimeImmutable('now');
 
             $mod = new Mod();
+            $modCategory = new ModCategory();
+            $modLoader = new ModLoader();
+            $gameVersion = new GameVersion();
+            $modFile = new ModFile();
+
+            $modCategory->setName("Test category");
+            $modLoader->setName("Test Loader");
+            $gameVersion->setSlug("1.20.1");
+
+            $this->entityManager->persist($gameVersion);
+
+            $modFile
+                ->setModEntity($mod)
+                ->setName("Test Mod file")
+                ->setStatus(FileStatus::APPROVED)
+                ->setChecksum("t3st_ch3cksum")
+                ->setGameVersions(new ArrayCollection([$gameVersion]))
+                ->setModVersion("1.0.0")
+                ->setChangelog("Test changelog");
+
+            $this->entityManager->persist($modCategory);
+            $this->entityManager->persist($modLoader);
+            $this->entityManager->persist($modFile);
+
+
             $mod->setName('modName')
                 ->setDownloads(100)
-                ->setCategories([ModCategories::CATEGORY_TECH])
+                ->setDeleted(false)
+                ->setDescription("Test mod description")
+                ->setCategories(new ArrayCollection([$modCategory]))
+                ->setModFiles(new ArrayCollection([$modFile]))
+                ->setVersions(new ArrayCollection([$gameVersion]))
                 ->setSide(ModSide::SIDE_BOTH)
-                ->setLoaders([ModLoader::LOADER_FORGE])
+                ->setLoaders(new ArrayCollection([$modLoader]))
                 ->setLicense(License::AFL_3_0)
                 ->setCreatedAt($now)
                 ->setSlug('modname')
