@@ -31,6 +31,24 @@ trait MockEntityTrait {
         return $data;
     }
 
+    /**
+     * @param GameVersion[] $gameVersions
+     * @return string[]
+     */
+    protected static function getModFileJsonData(
+        array $gameVersions
+    ): array {
+        $data = [
+            "name" => "Epic Weapons Mod File",
+            "modVersion" => "1.0.0",
+            "changelog" => "Added new weapons"
+        ];
+
+        $data['gameVersions'] = array_map(fn(GameVersion $gameVersion) => $gameVersion->getId(), $gameVersions);
+
+        return $data;
+    }
+
     protected static function generateTestMod(
         Collection $categories,
         Collection $loaders,
@@ -66,12 +84,13 @@ trait MockEntityTrait {
     }
     protected static function generateTestModFile(Collection $gameVersions): ModFile {
         return (new ModFile())
-            ->setName("forge")
+            ->setName("modFile")
             ->setModVersion("1.0.0")
             ->setChangelog("Added very important stuff")
             ->setChecksum("t3st_ch3cksum")
             ->setGameVersions($gameVersions)
             ->setStatus(FileStatus::APPROVED)
+            ->setIsActive(true)
             ;
     }
     protected static function generateTestGameVersion(): GameVersion {
