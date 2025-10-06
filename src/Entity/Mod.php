@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ModRepository::class)]
-#[Groups([ContextGroup::MOD_INDEX])]
+#[Groups([ContextGroup::MOD_INDEX, ContextGroup::SEARCH])]
 #[ORM\Table(name: 'mods')]
 class Mod
 {
