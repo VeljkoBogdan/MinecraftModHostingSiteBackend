@@ -36,9 +36,10 @@ class ModControllerTest extends WebTestCase {
         self::persistEntity(self::$gameVersion);
         self::persistEntity(self::$modLoader);
         self::persistEntity(self::$modCategory);
+        self::flushEntities();
 
         self::$modFile = self::generateTestModFile(new ArrayCollection([self::$gameVersion]));
-        self::persistEntity(self::$modFile);
+        self::persistAndFlushEntity(self::$modFile);
 
         self::$mod = self::generateTestMod(
             new ArrayCollection([self::$modCategory]),
@@ -46,7 +47,7 @@ class ModControllerTest extends WebTestCase {
             new ArrayCollection([self::$modFile]),
             new ArrayCollection([self::$gameVersion])
         );
-        self::persistEntity(self::$mod);
+        self::persistAndFlushEntity(self::$mod);
 
         parent::ensureKernelShutdown();
     }

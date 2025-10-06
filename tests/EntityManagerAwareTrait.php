@@ -30,8 +30,12 @@ trait EntityManagerAwareTrait
         return static::getContainer()->get('doctrine')->getManager();
     }
 
-    protected static function persistEntity(object $entity): int
+    protected static function persistEntity(object $entity): void
     {
+        self::getEntityManager()->persist($entity);
+    }
+
+    protected static function persistAndFlushEntity(object $entity): int {
         self::getEntityManager()->persist($entity);
         self::getEntityManager()->flush();
 
