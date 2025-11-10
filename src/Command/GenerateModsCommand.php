@@ -36,7 +36,7 @@ class GenerateModsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('amount', null, InputOption::VALUE_NONE, 'Amount of test mods to generate')
+            ->addArgument('amount', null, InputOption::VALUE_REQUIRED, 0)
         ;
     }
 
@@ -45,7 +45,7 @@ class GenerateModsCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $amount = $input->getArgument('amount');
 
-        if ($amount <= 0 || $amount == null) {
+        if ($amount <= 0 || !is_integer($amount)) {
             $io->error('Amount has to be at least 1');
             return Command::FAILURE;
         }
