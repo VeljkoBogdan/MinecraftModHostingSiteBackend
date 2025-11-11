@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use App\Model\FileInfo;
 use App\Repository\ModFileRepository;
 use App\Util\ContextGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ModFileRepository::class)]
@@ -31,13 +33,25 @@ class ModFile
     private ?string $checksum = null;
     #[ORM\ManyToMany(targetEntity: GameVersion::class)]
     private ?Collection $gameVersions;
-    #[ORM\Column(enumType: FileStatus::class)]
+    #[ORM\Column(nullable: true, enumType: FileStatus::class)]
     private ?FileStatus $status = null;
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $isActive = null;
+    #[ORM\Column]
+    private ?int $size = 0;
+    #[ORM\Column]
+    private ?string $location = null;
 
     public function __construct() {
         $this->gameVersions = new ArrayCollection();
+    }
+
+    public function populateFromFile(File $file): self {
+        $this
+            ->setName($file->getFilename())
+            ->setLocation($file->getRealPath())
+            ->setSize($file->getSize());
+        return $this;
     }
 
     public function getId(): ?int
@@ -114,6 +128,34 @@ class ModFile
 
     public function setIsActive(?bool $isActive): self {
         $this->isActive = $isActive;
+        return $this;
+    }
+
+    public function getSize(): ?int {
+        return $this->size;
+    }
+
+    public function setSize(?int $size): self {
+        $this->size = $size;
+        return $this;
+    }
+
+    public function getLocation(): ?string {
+        return $this->location;
+    }
+
+    public function setLocation(?string $location): self {
+        $this->location = $location;
+        return $this;
+    }
+
+    public function populateFromFileInfo(FileInfo $fileInfo): self {
+        $this
+            ->setIsActive(true)
+            ->setStatus(FileStatus::WAITING_APPROVAL)
+            ->setChecksum($fileInfo->checksum)
+            ->setModVersion($fileInfo->modVersion)
+            ->setChangelog($fileInfo->changelog);
         return $this;
     }
 }

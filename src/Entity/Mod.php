@@ -176,4 +176,12 @@ class Mod
         return $this;
     }
 
+    public function addModFile(ModFile $modFile): self {
+        if ($this->modFiles === null) {
+            $this->modFiles = new ArrayCollection();
+        }
+        $this->modFiles->add($modFile);
+        return $this;
+    }
+
 }
