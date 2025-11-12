@@ -22,7 +22,7 @@ readonly class FileManager {
     public function moveUploadedFile(UploadedFile $file, string $modId): File {
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFileName = $this->slugger->slug($originalName);
-        $fileName = $originalName . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $fileName = $safeFileName . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
         $dir = $this->resolveDir($modId);
 
