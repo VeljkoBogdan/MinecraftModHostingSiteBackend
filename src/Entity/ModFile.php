@@ -2,20 +2,20 @@
 
 namespace App\Entity;
 
-use App\Model\FileInfo;
+use App\Model\FileModel;
 use App\Repository\ModFileRepository;
 use App\Util\ContextGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ModFileRepository::class)]
 #[ORM\Table(name: 'modFile')]
 #[Groups([ContextGroup::MOD_FILE_INDEX])]
-class ModFile
-{
+class ModFile {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -25,11 +25,11 @@ class ModFile
     #[ORM\ManyToOne(targetEntity: Mod::class, inversedBy: 'modFiles')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Mod $modEntity = null;
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $modVersion = null;
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $changelog = null;
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $checksum = null;
     #[ORM\ManyToMany(targetEntity: GameVersion::class)]
     private ?Collection $gameVersions;
@@ -46,16 +46,25 @@ class ModFile
         $this->gameVersions = new ArrayCollection();
     }
 
-    public function populateFromFile(File $file): self {
-        $this
+    public function populateFromFileModel(FileModel $fileModel): void {
+        $file = $fileModel->fileName;
+        $this->setChecksum($fileModel->checksum)
+            ->setChangelog($fileModel->changelog)
+            ->setModVersion($fileModel->modVersion)
             ->setName($file->getFilename())
             ->setLocation($file->getRealPath())
-            ->setSize($file->getSize());
-        return $this;
+            ->setStatus(FileStatus::WAITING_APPROVAL)
+            ->setIsActive(true)
+        ;
+
+        try {
+            $this->setSize($file->getSize());
+        } catch (Exception) {
+            $this->setSize(0);
+        }
     }
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
@@ -146,16 +155,6 @@ class ModFile
 
     public function setLocation(?string $location): self {
         $this->location = $location;
-        return $this;
-    }
-
-    public function populateFromFileInfo(FileInfo $fileInfo): self {
-        $this
-            ->setIsActive(true)
-            ->setStatus(FileStatus::WAITING_APPROVAL)
-            ->setChecksum($fileInfo->checksum)
-            ->setModVersion($fileInfo->modVersion)
-            ->setChangelog($fileInfo->changelog);
         return $this;
     }
 }
